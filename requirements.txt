@@ -1,0 +1,2 @@
+pyquotex
+python-telegram-bot
