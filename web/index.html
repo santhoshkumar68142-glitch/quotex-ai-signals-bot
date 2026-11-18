@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quotex AI Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #070b14;
+    color: #e8f0ff;
+    font-family: Arial, sans-serif;
+    padding: 12px;
+}
+
+.app {
+    max-width: 500px;
+    margin: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 5px;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: bold;
+    color: #00ff9d;
+}
+
+.status {
+    font-size: 11px;
+    color: #00ff9d;
+    background: #10251e;
+    padding: 7px 10px;
+    border-radius: 20px;
+}
+
+.card {
+    background: linear-gradient(145deg, #111827, #0b111d);
+    border: 1px solid #1c293b;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 13px;
+}
+
+.asset-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+select {
+    background: #172234;
+    color: white;
+    border: 1px solid #29384c;
+    padding: 10px;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.price-change {
+    color: #00ff9d;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.timeframes {
+    display: flex;
+    gap: 7px;
+    margin-top: 18px;
+}
+
+.tf {
+    flex: 1;
+    border: 1px solid #263449;
+    background: #111b2a;
+    color: #8fa4bd;
+    padding: 9px 3px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.tf.active {
+    background: #00ff9d;
+    color: #07130d;
+    font-weight: bold;
+}
+
+.chart-card {
+    padding: 12px;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #8fa4bd;
+    margin-bottom: 10px;
+}
+
+canvas {
+    width: 100%;
+    height: 280px;
+    display: block;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 15px;
+    font-size: 11px;
+    margin-top: 8px;
+    color: #8fa4bd;
+}
+
+.green {
+    color: #00ff9d;
+}
+
+.blue {
+    color: #00c8ff;
+}
+
+.red {
+    color: #ff496c;
+}
+
+.timer-card {
+    text-align: center;
+    background: linear-gradient(145deg, #10251f, #0d1720);
+    border: 1px solid #174b38;
+}
+
+.timer-label {
+    color: #8fa4bd;
+    font-size: 12px;
+}
+
+.timer {
+    font-size: 38px;
+    font-weight: bold;
+    color: #00ff9d;
+    margin: 12px 0;
+    letter-spacing: 3px;
+}
+
+.progress {
+    height: 5px;
+    background: #1b2938;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #00ff9d;
+    width: 0%;
+    transition: width 0.5s;
+}
+
+.signal-card {
+    text-align: center;
+}
+
+.signal-title {
+    font-size: 12px;
+    color: #8fa4bd;
+    margin-bottom: 15px;
+}
+
+.signal {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.signal.wait {
+    color: #ffca50;
+}
+
+.signal.buy {
+    color: #00ff9d;
+    text-shadow: 0 0 18px #00ff9d55;
+}
+
+.signal.sell {
+    color: #ff496c;
+    text-shadow: 0 0 18px #ff496c55;
+}
+
+.confidence {
+    font-size: 13px;
+    color: #a5b5ca;
+}
+
+.indicators {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.indicator {
+    background: #0b1420;
+    border: 1px solid #1b293a;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.indicator-label {
+    font-size: 11px;
+    color: #8295ac;
+}
+
+.indicator-value {
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 7px;
+}
+
+.analyze-btn {
+    width: 100%;
+    border: none;
+    padding: 15px;
+    background: linear-gradient(90deg, #00ff9d, #00c8ff);
+    color: #06111b;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 12px;
+    margin-top: 13px;
+}
+
+.analyze-btn:active {
+    transform: scale(0.98);
+}
+
+.demo-label {
+    text-align: center;
+    color: #ffca50;
+    font-size: 10px;
+    margin-top: 12px;
+}
+
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 5px;
+    margin-top: 5px;
+    background: #111827;
+    border: 1px solid #1c293b;
+    border-radius: 15px;
+}
+
+.nav-item {
+    text-align: center;
+    font-size: 10px;
+    color: #8295ac;
+}
+
+.nav-item span {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.nav-item.active {
+    color: #00ff9d;
+}
+
+.disclaimer {
+    text-align: center;
+    color: #62748a;
+    font-size: 10px;
+    line-height: 1.6;
+    padding: 15px 5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">
+    <div class="logo">⚡ QUOTEX AI</div>
+    <div class="status" id="connectionStatus">● CONNECTING</div>
+</div>
+
+<div class="card">
+
+    <div class="asset-row">
+        <select id="asset">
+            <option>EUR/USD</option>
+            <option>GBP/USD</option>
+            <option>USD/JPY</option>
+            <option>EUR/GBP</option>
+            <option>BTC/USD</option>
+            <option>USD/CHF</option>
+        </select>
+
+        <span style="font-size:12px;color:#8295ac">MARKET</span>
+    </div>
+
+    <div class="price" id="price">1.08452</div>
+    <div class="price-change" id="change">▲ +0.00012</div>
+
+    <div class="timeframes">
+        <button class="tf active" data-tf="1">1m</button>
+        <button class="tf" data-tf="2">2m</button>
+        <button class="tf" data-tf="5">5m</button>
+        <button class="tf" data-tf="15">15m</button>
+        <button class="tf" data-tf="30">30m</button>
+    </div>
+
+</div>
+
+<div class="card chart-card">
+
+    <div class="chart-header">
+        <span>📈 CANDLESTICK CHART</span>
+        <span class="green">● LIVE</span>
+    </div>
+
+    <div id="zoomControls" style="display:flex;gap:8px;justify-content:flex-end;margin:8px 0;">
+        <button onclick="changeZoom(-10)" style="background:#172638;color:#00ff9d;border:1px solid #29445c;border-radius:8px;padding:8px 16px;font-size:18px;">−</button>
+        <button onclick="resetZoom()" style="background:#172638;color:#00c8ff;border:1px solid #29445c;border-radius:8px;padding:8px 16px;">↺</button>
+        <button onclick="changeZoom(10)" style="background:#172638;color:#00ff9d;border:1px solid #29445c;border-radius:8px;padding:8px 16px;font-size:18px;">＋</button>
+    </div>
+    <canvas id="chart"></canvas>
+
+    <div class="chart-legend">
+        <span class="green">━ EMA 9</span>
+        <span class="blue">━ EMA 21</span>
+    </div>
+
+</div>
+
+<div class="card timer-card">
+
+    <div class="timer-label">⏱ NEXT CANDLE STARTS IN</div>
+
+    <div class="timer" id="timer">00:00</div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+</div>
+
+<div class="card signal-card">
+
+    <div class="signal-title">🧠 AI MARKET ANALYSIS</div>
+
+    <div class="signal wait" id="signal">WAIT</div>
+
+    <div class="confidence" id="confidence">
+        Demo analysis preview
+    </div>
+
+    <div class="indicators">
+
+        <div class="indicator">
+            <div class="indicator-label">RSI (14)</div>
+            <div class="indicator-value" id="rsi">50.0</div>
+        </div>
+
+        <div class="indicator">
+            <div class="indicator-label">EMA TREND</div>
+            <div class="indicator-value green" id="trend">BULLISH</div>
+        </div>
+
+        <div class="indicator">
+            <div class="indicator-label">MOMENTUM</div>
+            <div class="indicator-value" id="momentum">NORMAL</div>
+        </div>
+
+        <div class="indicator">
+            <div class="indicator-label">MARKET</div>
+            <div class="indicator-value" id="market">ACTIVE</div>
+        </div>
+
+    </div>
+
+    <button class="analyze-btn" onclick="analyze()">
+        🔍 ANALYZE MARKET
+    </button>
+
+    <div class="demo-label">
+        ⚠️ LIVE MARKET DATA · EDUCATIONAL ANALYSIS
+    </div>
+
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-item active">
+        <span>📊</span>Chart
+    </div>
+    <div class="nav-item">
+        <span>⚡</span>Signals
+    </div>
+    <div class="nav-item">
+        <span>🧠</span>AI
+    </div>
+    <div class="nav-item">
+        <span>🎓</span>Academy
+    </div>
+</div>
+
+<div class="disclaimer">
+    Educational demonstration only.<br>
+    Trading involves risk. Signals are not guaranteed.
+</div>
+
+</div>
+
+<script>
+
+const canvas = document.getElementById("chart");
+const ctx = canvas.getContext("2d");
+
+let candles = [];
+let currentPrice = 0;
+let timeframe = 1;
+let candleStart = Date.now();
+let marketData = null;
+let apiBusy = false;
+const API_BASE = "http://127.0.0.1:8000";
+let zoomCount = 30;
+
+function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * devicePixelRatio;
+    canvas.height = rect.height * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    drawChart();
+}
+
+function drawChart() {
+
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    if (!width || !height) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const visibleCandles = candles.slice(-zoomCount);
+    const maxPrice = Math.max(...visibleCandles.map(c => c.high));
+    const minPrice = Math.min(...visibleCandles.map(c => c.low));
+
+    const range = maxPrice - minPrice || 0.001;
+
+    function y(price) {
+        return height - ((price - minPrice) / range) * height;
+    }
+
+    // Grid
+    ctx.strokeStyle = "#1b2938";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i < 5; i++) {
+        const gy = height * i / 4;
+
+        ctx.beginPath();
+        ctx.moveTo(0, gy);
+        ctx.lineTo(width, gy);
+        ctx.stroke();
+    }
+
+    const candleWidth = width / visibleCandles.length * 0.65;
+
+    visibleCandles.forEach((c, i) => {
+
+        const x = (i + 0.5) * width / visibleCandles.length;
+
+        const bullish = c.close >= c.open;
+        const color = bullish ? "#00ff9d" : "#ff496c";
+
+        // Wick
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(x, y(c.high));
+        ctx.lineTo(x, y(c.low));
+        ctx.stroke();
+
+        // Candle body
+        ctx.fillStyle = color;
+
+        const bodyTop = y(Math.max(c.open, c.close));
+        const bodyBottom = y(Math.min(c.open, c.close));
+
+        ctx.fillRect(
+            x - candleWidth / 2,
+            bodyTop,
+            candleWidth,
+            Math.max(2, bodyBottom - bodyTop)
+        );
+    });
+
+    // EMA lines
+    drawEMA(9, "#00ff9d");
+    drawEMA(21, "#00c8ff");
+
+}
+
+function drawEMA(period, color) {
+
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    const prices = candles.slice(-zoomCount).map(c => c.close);
+
+    const multiplier = 2 / (period + 1);
+
+    let ema = prices[0];
+
+    const values = [];
+
+    prices.forEach(price => {
+        ema = (price - ema) * multiplier + ema;
+        values.push(ema);
+    });
+
+    const maxPrice = Math.max(...candles.map(c => c.high));
+    const minPrice = Math.min(...candles.map(c => c.low));
+    const range = maxPrice - minPrice || 0.001;
+
+    function y(price) {
+        return height - ((price - minPrice) / range) * height;
+    }
+
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+
+    values.forEach((value, i) => {
+        const x = (i + 0.5) * width / values.length;
+
+        if (i === 0) {
+            ctx.moveTo(x, y(value));
+        } else {
+            ctx.lineTo(x, y(value));
+        }
+    });
+
+    ctx.stroke();
+}
+
+
+function changeZoom(amount) {
+    zoomCount = Math.max(5, Math.min(100, zoomCount + amount));
+    drawChart();
+}
+
+function resetZoom() {
+    zoomCount = 30;
+    drawChart();
+}
+
+async function fetchMarket() {
+
+    if (apiBusy) return;
+    apiBusy = true;
+
+    try {
+        const response = await fetch(
+            API_BASE + "/api/market?tf=" + (timeframe * 60),
+            { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+            throw new Error("API HTTP " + response.status);
+        }
+
+        const data = await response.json();
+        marketData = data;
+
+        if (data.candles && data.candles.length) {
+            candles = data.candles.map(c => ({
+                time: c.time,
+                open: Number(c.open),
+                high: Number(c.high),
+                low: Number(c.low),
+                close: Number(c.close)
+            }));
+
+            candles = candles.slice(-100);
+        }
+
+        currentPrice = Number(data.price);
+
+        document.getElementById("price").innerText =
+            currentPrice.toFixed(5);
+
+        document.getElementById("change").innerText =
+            data.connected ? "● LIVE QUOTEX DATA" : "● DISCONNECTED";
+
+        const status = document.getElementById("connectionStatus");
+
+        if (status) {
+            status.innerText = data.connected ? "● LIVE" : "● DISCONNECTED";
+            status.style.color = data.connected ? "#00ff9d" : "#ff496c";
+        }
+
+        const chartStatus = document.getElementById("chartStatus");
+
+        if (chartStatus) {
+            chartStatus.innerText = data.connected ? "● LIVE" : "● OFFLINE";
+        }
+
+        renderAnalysis(data.analysis || {});
+        drawChart();
+
+    } catch (error) {
+
+        console.error("Market API error:", error);
+
+        const status = document.getElementById("connectionStatus");
+
+        if (status) {
+            status.innerText = "● OFFLINE";
+            status.style.color = "#ff496c";
+        }
+
+        document.getElementById("change").innerText =
+            "Backend connection unavailable";
+
+    } finally {
+        apiBusy = false;
+    }
+}
+
+function renderAnalysis(analysis) {
+
+    const rsi = Number(analysis.rsi || 0);
+    const ema9 = Number(analysis.ema9 || 0);
+    const ema21 = Number(analysis.ema21 || 0);
+    const signal = analysis.signal || "WAIT";
+
+    document.getElementById("rsi").innerText =
+        rsi.toFixed(1);
+
+    const bullish = ema9 > ema21;
+
+    document.getElementById("trend").innerText =
+        bullish ? "BULLISH ↑" : "BEARISH ↓";
+
+    document.getElementById("trend").className =
+        "indicator-value " + (bullish ? "green" : "red");
+
+    document.getElementById("momentum").innerText =
+        Math.abs(ema9 - ema21) > 0.0001 ? "STRONG" : "NORMAL";
+
+    document.getElementById("market").innerText =
+        marketData && marketData.connected ? "LIVE" : "OFFLINE";
+
+    const signalElement = document.getElementById("signal");
+
+    signalElement.innerText = signal;
+
+    signalElement.className = "signal " +
+        (signal === "BUY" ? "buy" :
+        signal === "SELL" ? "sell" : "wait");
+
+    const reasons = analysis.reasons || [];
+
+    document.getElementById("confidence").innerText =
+        reasons.length ? reasons.join(" · ") : "Insufficient market data";
+}
+
+function analyze() {
+
+    if (marketData && marketData.analysis) {
+        renderAnalysis(marketData.analysis);
+    } else {
+        fetchMarket();
+    }
+}
+
+function updateTimer() {
+
+    const duration = timeframe * 60;
+
+    const now = Math.floor(Date.now() / 1000);
+
+    const remaining = duration - (now % duration);
+
+    const minutes = Math.floor(remaining / 60);
+    const seconds = remaining % 60;
+
+    document.getElementById("timer").innerText =
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0");
+
+    const progress = ((duration - remaining) / duration) * 100;
+
+    document.getElementById("progress").style.width =
+        progress + "%";
+}
+
+
+
+function calculateEMA(prices, period) {
+
+    const multiplier = 2 / (period + 1);
+
+    let ema = prices[0];
+
+    prices.forEach(price => {
+        ema = (price - ema) * multiplier + ema;
+    });
+
+    return ema;
+}
+
+document.querySelectorAll(".tf").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document.querySelectorAll(".tf").forEach(b =>
+            b.classList.remove("active")
+        );
+
+        button.classList.add("active");
+
+        timeframe = Number(button.dataset.tf);
+
+        candles = [];
+        marketData = null;
+        fetchMarket();
+        updateTimer();
+    });
+
+});
+
+document.getElementById("asset").addEventListener("change", () => {
+    fetchMarket();
+});
+
+setInterval(fetchMarket, 3000);
+
+setInterval(updateTimer, 1000);
+
+
+
+window.addEventListener("resize", resizeCanvas);
+
+resizeCanvas();
+fetchMarket();
+updateTimer();
+
+</script>
+
+</body>
+</html>
