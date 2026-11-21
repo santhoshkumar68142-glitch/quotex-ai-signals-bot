@@ -1,9 +1,41 @@
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+credentials
+credentials.*
+*.pem
+*.key
+
+# Quotex session and authentication data
+session_backup*.json
+session*.json
+cookies*.json
+token*.json
+
+# Logs
+*.log
+logs/
+
+# Backups
 *.backup
 *.save
 *.before_analyze_fix
-.env
-session_backup.json
-session_backup_before_refresh.json
-credentials
+*_backup.*
+*.bak
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
