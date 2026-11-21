@@ -1,2 +1,3 @@
 git+https://github.com/cleitonleonel/pyquotex.git
-python-telegram-bot
+python-telegram-bot>=20.0,<23.0
+python-dotenv>=1.0,<2.0
