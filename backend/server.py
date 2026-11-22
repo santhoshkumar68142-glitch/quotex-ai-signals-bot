@@ -1,3 +1,4 @@
+
 import os
 import json
 import time
@@ -18,6 +19,9 @@ from pyquotex.stable_api import Quotex
 
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "8000"))
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DASHBOARD_PATH = os.path.join(BASE_DIR, "web", "index.html")
 
 DEFAULT_ASSET = os.getenv("QUOTEX_ASSET", "EURUSD").upper()
 
@@ -440,6 +444,30 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
+
+        # Serve dashboard homepage
+        if parsed.path == "/":
+            try:
+                with open(DASHBOARD_PATH, "rb") as file:
+                    body = file.read()
+
+                self.send_response(200)
+                self.send_header(
+                    "Content-Type",
+                    "text/html; charset=utf-8",
+                )
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            except FileNotFoundError:
+                self.send_json(
+                    {"error": "Dashboard file not found"},
+                    404,
+                )
+
+            return
 
         if parsed.path == "/api/status":
             with lock:
